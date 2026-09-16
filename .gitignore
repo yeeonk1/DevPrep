@@ -1,40 +1,72 @@
-HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+# ==============================
+# DevPrep .gitignore
+# ==============================
 
-### STS ###
-.apt_generated
+# OS
+.DS_Store
+Thumbs.db
+
+# ==============================
+# Backend - Java / Gradle
+# ==============================
+.gradle/
+**/build/
+
+# Gradle Wrapper
+!**/gradle/wrapper/gradle-wrapper.jar
+
+# ==============================
+# Eclipse / STS
+# ==============================
 .classpath
-.factorypath
 .project
-.settings
+.settings/
+.factorypath
 .springBeans
-.sts4-cache
+.sts4-cache/
+.apt_generated/
 bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
 
-### IntelliJ IDEA ###
-.idea
-*.iws
+# ==============================
+# IntelliJ IDEA
+# ==============================
+.idea/
 *.iml
+*.iws
 *.ipr
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-### VS Code ###
+# ==============================
+# VS Code
+# ==============================
 .vscode/
 
-### env
+# ==============================
+# Frontend - React / Vite
+# ==============================
+**/node_modules/
+**/dist/
+**/.vite/
+
+# ==============================
+# Environment / Secrets
+# ==============================
 .env
+.env.*
+!.env.example
+
+# ==============================
+# Logs / Temporary
+# ==============================
+*.log
+logs/
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# ==============================
+# Coverage
+# ==============================
+coverage/
+.nyc_output/
