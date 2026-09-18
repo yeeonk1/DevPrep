@@ -9,6 +9,7 @@ import lombok.Data;
 @Builder
 public class ScheduleResponse {
 
+	private Long id;
 	private String title;
 	private String content;
 	private LocalDateTime startAt;
