@@ -99,7 +99,7 @@ public class ScheduleService {
 	
 	// 일정 삭제
 	@Transactional
-	public void deleteSchedule(String userId, Long scheduleId) {
+	public String deleteSchedule(String userId, Long scheduleId) {
 		
 		Schedule schedule = scheduleRepository.findById(scheduleId)
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 일정입니다."));
@@ -112,5 +112,7 @@ public class ScheduleService {
 		}
 		
 		scheduleRepository.delete(schedule);
+		
+		return "";
 	}
 }
