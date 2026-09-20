@@ -11,7 +11,6 @@ import com.devprep.entity.Schedule;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long>{
 	
-	// 일정 조회
 	@Query("SELECT s "
 			+ "FROM Schedule s "
 			+ "WHERE s.user.userId = :userId "
@@ -23,4 +22,12 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>{
 	        @Param("startAt") LocalDateTime startAt,
 	        @Param("endAt") LocalDateTime endAt
 	);
+	
+	@Query("SELECT s "
+			+ "FROM Schedule s "
+			+ "WHERE s.user.userId = :userId "
+			+ "AND s.scheduleId = :scheduleId")
+	Schedule getScheduleDetail(
+			@Param("userId") String userId,
+			@Param("scheduleId") Long scheduleId);
 }

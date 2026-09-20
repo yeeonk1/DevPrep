@@ -26,14 +26,33 @@ public class ScheduleController {
 	private final ScheduleService scheduleService;
 	
 	@GetMapping("/calendar")
-	public ResponseEntity<List<ScheduleResponse>> getSchedules(
+	public ResponseEntity<List<ScheduleResponse>> getSchedulesByCalendar(
 			@RequestParam("userId") String userId,
 			@RequestParam("startAt") LocalDateTime startAt,
 			@RequestParam("endAt") LocalDateTime endAt) {
 		
-		List<ScheduleResponse> schedule = scheduleService.getSchedules(userId, startAt, endAt);
+		List<ScheduleResponse> schedule = scheduleService.getSchedulesByCalendar(userId, startAt, endAt);
 		
 		return ResponseEntity.ok(schedule);
+	}
+	
+	@GetMapping("/list")
+	public ResponseEntity<List<ScheduleResponse>> getScheduleTodayAndTomorrow(
+			@RequestParam("userId") String userId) {
+		
+		List<ScheduleResponse> list = scheduleService.getScheduleTodayAndTomorrow(userId);
+		
+		return ResponseEntity.ok(list);
+	}
+	
+	@GetMapping("detail")
+	public ResponseEntity<ScheduleResponse> getScheduleDetail(
+			@RequestParam("userId") String userId,
+			@RequestParam("scheduleId") Long scheduleId) {
+		
+		ScheduleResponse detail = scheduleService.getScheduleDetail(userId, scheduleId);
+		
+		return ResponseEntity.ok(detail);
 	}
 	
 	@PostMapping("/regist")

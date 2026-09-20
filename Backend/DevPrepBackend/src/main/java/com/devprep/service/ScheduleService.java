@@ -1,6 +1,8 @@
 package com.devprep.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -22,23 +24,54 @@ public class ScheduleService {
 	private final ScheduleRepository scheduleRepository;
 	private final UserRepository userRepository;
 	
-	// 일정 조회
+	// 일정 조회 (달력)
 	@Transactional(readOnly = true)
-	public List<ScheduleResponse> getSchedules(String userId, LocalDateTime startAt, LocalDateTime endAt) {
+	public List<ScheduleResponse> getSchedulesByCalendar(String userId, LocalDateTime startAt, LocalDateTime endAt) {
 				
 		userRepository.findByUserId(userId)
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
 		List<Schedule> schedules = scheduleRepository.findSchedulesByPeriod(userId, startAt, endAt);
 		
-		return schedules.stream().map(schedule -> ScheduleResponse.builder()
-				.id(schedule.getId())
-				.title(schedule.getTitle())
-				.content(schedule.getContent())
-				.startAt(schedule.getStartAt())
-				.endAt(schedule.getEndAt())
-				.build())
-			.toList();
+		return schedules.stream()
+				.map(this::toResponse)
+				.toList();
+	}
+	
+	// 일정 조회 (목록)
+	@Transactional(readOnly = true)
+	public List<ScheduleResponse> getScheduleTodayAndTomorrow(String userId) {
+		
+		userRepository.findByUserId(userId)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+		
+		LocalDate today = LocalDate.now();
+		LocalDateTime startAt = today.atStartOfDay();
+		LocalDateTime endAt = today.plusDays(1).atTime(LocalTime.MAX);
+		
+		List<Schedule> list = scheduleRepository.findSchedulesByPeriod(userId, startAt, endAt);
+		
+		return list.stream()
+				.map(this::toResponse)
+				.toList();
+		
+	}
+	
+	// 일정 조회 (상세)
+	public ScheduleResponse getScheduleDetail(String userId, Long scheduleId) {
+		Schedule schedule = scheduleRepository.findById(scheduleId)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 일정입니다."));
+		
+		User user = userRepository.findByUserId(userId)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+		
+		if (!schedule.getUser().getUserId().equals(user.getUserId())) {
+			throw new IllegalArgumentException("조회 권한이 없습니다.");
+		}
+		
+		Schedule detail = scheduleRepository.getScheduleDetail(userId, scheduleId);
+		
+		return toResponse(detail);
 	}
 	
 	// 일정 등록
@@ -114,5 +147,15 @@ public class ScheduleService {
 		scheduleRepository.delete(schedule);
 		
 		return "";
+	}
+	
+	private ScheduleResponse toResponse(Schedule schedule) {
+		return ScheduleResponse.builder()
+				.id(schedule.getId())
+				.title(schedule.getTitle())
+				.content(schedule.getContent())
+				.startAt(schedule.getStartAt())
+				.endAt(schedule.getEndAt())
+				.build();
 	}
 }
