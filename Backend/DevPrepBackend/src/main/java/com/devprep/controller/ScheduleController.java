@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -31,7 +32,26 @@ public class ScheduleController {
 			@RequestParam("startAt") LocalDateTime startAt,
 			@RequestParam("endAt") LocalDateTime endAt) {
 		
-		List<ScheduleResponse> schedule = scheduleService.getSchedules(userId, startAt, endAt);
+		List<ScheduleResponse> schedule = scheduleService.getSchedulesByCalendar(userId, startAt, endAt);
+		
+		return ResponseEntity.ok(schedule);
+	}
+	
+	@GetMapping("/list")
+	public ResponseEntity<List<ScheduleResponse>> getScheduleList(
+			@RequestParam("userId") String userId) {
+		
+		List<ScheduleResponse> schedule = scheduleService.getScheduleList(userId);
+		
+		return ResponseEntity.ok(schedule);
+	}
+	
+	@GetMapping("detail")
+	public ResponseEntity<ScheduleResponse> getScheduleDetail(
+			@RequestParam("userId") String userId,
+			@RequestParam("scheduleId") Long scheduleId) {
+		
+		ScheduleResponse schedule = scheduleService.getScheduleDetail(userId, scheduleId);
 		
 		return ResponseEntity.ok(schedule);
 	}
@@ -57,6 +77,7 @@ public class ScheduleController {
 		return ResponseEntity.ok("일정이 성공적으로 수정되었습니다.");
 	}
 	
+	@DeleteMapping("delete")
 	public String deleteSchedule(
 			@RequestParam("scheduleId") Long scheduleId,
 			@RequestParam("userId") String userId) {
