@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,7 +37,7 @@ public class ScheduleController {
 		return ResponseEntity.ok(schedule);
 	}
 	
-	@GetMapping("/list")
+	@GetMapping("/today-tomorrow")
 	public ResponseEntity<List<ScheduleResponse>> getScheduleTodayAndTomorrow(
 			@RequestParam("userId") String userId) {
 		
@@ -76,6 +77,7 @@ public class ScheduleController {
 		return ResponseEntity.ok("일정이 성공적으로 수정되었습니다.");
 	}
 	
+	@DeleteMapping("/delete")
 	public String deleteSchedule(
 			@RequestParam("scheduleId") Long scheduleId,
 			@RequestParam("userId") String userId) {
