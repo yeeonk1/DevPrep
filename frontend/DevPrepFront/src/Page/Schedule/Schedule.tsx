@@ -7,6 +7,8 @@ import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { ko } from "date-fns/locale";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { ScheduleDayListModal } from "./modal/ScheduleDayList";
+import { ScheduleDetail } from "./modal/ScheduleDetail";
 
 export function SchedulePage() {
   const [sidebarSchedules, setSidebarSchedules] = useState<ScheduleResponse[]>(
@@ -17,6 +19,19 @@ export function SchedulePage() {
   >([]);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [calendarDate, setCalendarDate] = useState<Date>(new Date());
+
+  const [selectedCalendarDate, setSelectedCalendarDate] = useState<Date | null>(
+    null,
+  );
+  const [isScheduleModalOpen, setIsScheduleModalOpen] =
+    useState<boolean>(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedDateSchedules, setSelectedDateSchedules] = useState<
+    ScheduleResponse[]
+  >([]);
+  const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(
+    null,
+  );
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -38,12 +53,12 @@ export function SchedulePage() {
   const today = new Date();
   const tomorrow = addDays(today, 1);
 
-  const todaySchedules = sidebarSchedules.filter((schedule) => {
-    isSameDay(new Date(schedule.startAt), today);
-  });
-  const tomorrowSchedules = sidebarSchedules.filter((schedule) => {
-    isSameDay(new Date(schedule.startAt), tomorrow);
-  });
+  const todaySchedules = sidebarSchedules.filter((schedule) =>
+    isSameDay(new Date(schedule.startAt), today),
+  );
+  const tomorrowSchedules = sidebarSchedules.filter((schedule) =>
+    isSameDay(new Date(schedule.startAt), tomorrow),
+  );
 
   const getCalendarSchedules = async (date: Date) => {
     try {
@@ -79,7 +94,7 @@ export function SchedulePage() {
     locales,
   });
 
-  const CalendarEvents = calendarSchedules.map((schedule) => ({
+  const calendarEvents = calendarSchedules.map((schedule) => ({
     id: schedule.id,
     title: schedule.title,
     start: new Date(schedule.startAt),
@@ -96,6 +111,23 @@ export function SchedulePage() {
     setSelectedDate(date);
     setCalendarDate(date);
     getCalendarSchedules(date);
+  };
+
+  const handleSelectSlot = (slotInfo: { start: Date; end: Date }) => {
+    const selectedSchedules = calendarSchedules.filter((schedule) =>
+      isSameDay(new Date(schedule.startAt), slotInfo.start),
+    );
+
+    setSelectedCalendarDate(slotInfo.start);
+    setSelectedDateSchedules(selectedSchedules);
+    setIsScheduleModalOpen(true);
+  };
+
+  const handleSelectSchedule = (scheduleId: number) => {
+    setSelectedScheduleId(scheduleId);
+
+    setIsScheduleModalOpen(false);
+    setIsDetailModalOpen(true);
   };
 
   if (loading) {
@@ -130,14 +162,13 @@ export function SchedulePage() {
           ) : (
             todaySchedules.map((schedule) => (
               <div key={schedule.id}>
-                <strong>{schedule.title}</strong>
-                <p>{schedule.content}</p>
                 <span>
                   {new Date(schedule.startAt).toLocaleTimeString("ko-KR", {
                     hour: "2-digit",
                     minute: "2-digit",
                   })}
                 </span>
+                <strong>{schedule.title}</strong>
               </div>
             ))
           )}
@@ -151,32 +182,47 @@ export function SchedulePage() {
           ) : (
             tomorrowSchedules.map((schedule) => (
               <div key={schedule.id}>
-                <strong>{schedule.title}</strong>
-                <p>{schedule.content}</p>
                 <span>
                   {new Date(schedule.startAt).toLocaleTimeString("ko-KR", {
                     hour: "2-digit",
                     minute: "2-digit",
                   })}
                 </span>
+                <strong>{schedule.title}</strong>
               </div>
             ))
           )}
         </section>
       </aside>
-
-      {/* 오른쪽 */}
       <main className="schedule-calendar">
         <Calendar
           localizer={localizer}
-          events={CalendarEvents}
+          events={calendarEvents}
           startAccessor="start"
           endAccessor="end"
           defaultView="month"
           date={calendarDate}
           onNavigate={handleNavigate}
+          selectable
+          onSelectSlot={handleSelectSlot}
         />
       </main>
+      <ScheduleDayListModal
+        isOpen={isScheduleModalOpen}
+        date={selectedCalendarDate}
+        schedules={selectedDateSchedules}
+        onClose={() => setIsScheduleModalOpen(false)}
+        onSelectSchedule={handleSelectSchedule}
+      />
+      ;
+      <ScheduleDetail
+        isOpen={isDetailModalOpen}
+        scheduleId={selectedScheduleId}
+        onClose={() => {
+          setIsDetailModalOpen(false);
+          setSelectedScheduleId(null);
+        }}
+      />
     </div>
   );
 }

@@ -1,5 +1,9 @@
 import axios from "axios";
-import type { ScheduleRequest, ScheduleResponse } from "../../types/schedule";
+import type {
+  ScheduleDetailResponse,
+  ScheduleRequest,
+  ScheduleResponse,
+} from "../../types/schedule";
 
 const api = axios.create({
   baseURL: "/schedule",
@@ -36,8 +40,8 @@ export const scheduleApi = {
   // 일정 조회 (상세)
   getScheduleDetail: async (
     userId: string,
-    scheduleId: BigInt,
-  ): Promise<ScheduleResponse> => {
+    scheduleId: number,
+  ): Promise<ScheduleDetailResponse> => {
     const res = await api.get("/detail", { params: { userId, scheduleId } });
     return res.data;
   },
