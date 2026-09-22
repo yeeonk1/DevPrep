@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class ScheduleController {
 
 	private final ScheduleService scheduleService;
-	
+
 	@GetMapping("/calendar")
 	public ResponseEntity<List<ScheduleResponse>> getSchedulesByCalendar(
 			@RequestParam("userId") String userId,
@@ -46,7 +46,7 @@ public class ScheduleController {
 		return ResponseEntity.ok(list);
 	}
 	
-	@GetMapping("detail")
+	@GetMapping("/detail")
 	public ResponseEntity<ScheduleResponse> getScheduleDetail(
 			@RequestParam("userId") String userId,
 			@RequestParam("scheduleId") Long scheduleId) {

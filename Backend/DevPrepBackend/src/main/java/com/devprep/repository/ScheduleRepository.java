@@ -26,7 +26,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>{
 	@Query("SELECT s "
 			+ "FROM Schedule s "
 			+ "WHERE s.user.userId = :userId "
-			+ "AND s.scheduleId = :scheduleId")
+			+ "AND s.id = :scheduleId")
 	Schedule getScheduleDetail(
 			@Param("userId") String userId,
 			@Param("scheduleId") Long scheduleId);
