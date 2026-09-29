@@ -4,6 +4,9 @@ import type {
   ScheduleDetailResponse,
 } from "../../../types/schedule";
 import { scheduleApi } from "../../../api/schedule/schedule";
+import { IoArrowBackOutline } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
+import "../../../css/ScheduleDetail.css";
 
 export function ScheduleDetail({
   isOpen,
@@ -11,6 +14,7 @@ export function ScheduleDetail({
   onClose,
 }: ScheduleDetailModalProps) {
   const userId = "test"; // 임시
+  const nav = useNavigate();
   const [schedule, setSchedule] = useState<ScheduleDetailResponse | null>(null);
 
   useEffect(() => {
@@ -31,6 +35,14 @@ export function ScheduleDetail({
     getScheduleDetail();
   }, [isOpen, scheduleId]);
 
+  const deleteSchedule = async () => {
+    try {
+      await scheduleApi.deleteSchedule;
+    } catch (error) {
+      console.error("일정 삭제 실패", error);
+    }
+  };
+
   if (!isOpen) {
     return null;
   }
@@ -47,6 +59,9 @@ export function ScheduleDetail({
     <div className="modal-overlay">
       <div className="schedule-detail-modal">
         <h2>{schedule.title}</h2>
+        <div className="back-icon" onClick={onClose}>
+          <IoArrowBackOutline />
+        </div>
 
         <p>{schedule.content}</p>
 
@@ -54,7 +69,8 @@ export function ScheduleDetail({
           {schedule.startAt} ~ {schedule.endAt}
         </p>
 
-        <button onClick={onClose}>닫기</button>
+        <button onClick={() => nav("/schedule/edit")}>수정</button>
+        <button onClick={deleteSchedule}>삭제</button>
       </div>
     </div>
   );

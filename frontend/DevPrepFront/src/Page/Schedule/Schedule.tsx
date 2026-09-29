@@ -5,10 +5,13 @@ import { addDays, getDay, isSameDay, parse, startOfWeek } from "date-fns";
 import { endOfMonth, format, startOfMonth } from "date-fns";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { ko } from "date-fns/locale";
+import { LuPencilLine } from "react-icons/lu";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { ScheduleDayListModal } from "./modal/ScheduleDayList";
 import { ScheduleDetail } from "./modal/ScheduleDetail";
+import { useNavigate } from "react-router-dom";
+import "../../css/Schedule.css";
 
 export function SchedulePage() {
   const [sidebarSchedules, setSidebarSchedules] = useState<ScheduleResponse[]>(
@@ -36,6 +39,7 @@ export function SchedulePage() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const userId = "test"; // 임시
+  const nav = useNavigate();
 
   const getSidebarSchedules = async () => {
     try {
@@ -72,6 +76,9 @@ export function SchedulePage() {
       );
 
       setCalendarSchedules(data);
+
+      console.log("calendar data =", data);
+      console.log("array? =", Array.isArray(data));
     } catch (error) {
       console.error("달력 일정 조회 실패", error);
     }
@@ -132,17 +139,31 @@ export function SchedulePage() {
 
   if (loading) {
     return (
-      <p>
-        일정을 조회하고 있습니다
-        <br />
-        잠시만 기다려 주세요
-      </p>
+      <div className="schedule-loading">
+        <div className="schedule-loading-card">
+          <div className="schedule-loading-spinner"></div>
+
+          <p>
+            일정을 조회하고 있습니다
+            <br />
+            잠시만 기다려 주세요
+          </p>
+        </div>
+      </div>
     );
   }
 
   return (
     <div className="schedule-page">
       <aside className="schedule-sidebar">
+        <div className="schedule-regist">
+          <button
+            className="schedule-regist-btn"
+            onClick={() => nav("/schedule/regist")}
+          >
+            <LuPencilLine />
+          </button>
+        </div>
         <div className="schedule-date-picker">
           <label htmlFor="schedule-date">날짜 선택</label>
 
@@ -201,6 +222,7 @@ export function SchedulePage() {
           startAccessor="start"
           endAccessor="end"
           defaultView="month"
+          views={["month"]}
           date={calendarDate}
           onNavigate={handleNavigate}
           selectable
@@ -214,7 +236,7 @@ export function SchedulePage() {
         onClose={() => setIsScheduleModalOpen(false)}
         onSelectSchedule={handleSelectSchedule}
       />
-      ;
+
       <ScheduleDetail
         isOpen={isDetailModalOpen}
         scheduleId={selectedScheduleId}

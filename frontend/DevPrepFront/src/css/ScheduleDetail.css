@@ -1,0 +1,146 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background-color: rgba(15, 23, 42, 0.45);
+
+  z-index: 2100;
+}
+
+.schedule-detail-modal {
+  position: relative;
+
+  width: 100%;
+  max-width: 520px;
+
+  padding: 30px;
+
+  box-sizing: border-box;
+
+  background-color: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
+}
+
+.back-icon {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+
+  border-radius: 6px;
+
+  color: #64748b;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.back-icon:hover {
+  background-color: #f1f5f9;
+  color: #1e293b;
+}
+
+.back-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.schedule-detail-modal h2 {
+  margin: 0;
+
+  padding: 0 40px 20px;
+
+  border-bottom: 1px solid #f1f5f9;
+
+  font-size: 20px;
+  font-weight: 700;
+
+  color: #1e293b;
+}
+
+.schedule-detail-modal p {
+  margin: 0;
+
+  font-size: 14px;
+  line-height: 1.7;
+
+  color: #64748b;
+}
+
+.schedule-detail-modal h2 + p {
+  padding: 22px 0;
+
+  color: #334155;
+  white-space: pre-wrap;
+}
+
+.schedule-detail-modal p:last-of-type {
+  padding: 14px 16px;
+
+  background-color: #f8fafc;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+
+  color: #475569;
+  font-size: 13px;
+}
+
+.schedule-detail-modal button {
+  width: 100%;
+
+  margin-top: 10px;
+  padding: 11px 16px;
+
+  border: none;
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.schedule-detail-modal button:first-of-type {
+  margin-top: 24px;
+
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.schedule-detail-modal button:first-of-type:hover {
+  background-color: #1d4ed8;
+}
+
+.schedule-detail-modal button:last-of-type {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+.schedule-detail-modal button:last-of-type:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
+}

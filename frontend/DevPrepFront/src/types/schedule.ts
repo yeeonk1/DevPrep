@@ -9,8 +9,8 @@ export interface ScheduleResponse {
 export interface ScheduleRequest {
   title: string;
   content: string;
-  startAt: Date;
-  endAt: Date;
+  startAt: string;
+  endAt: string;
 }
 
 export interface ScheduleDetailResponse {

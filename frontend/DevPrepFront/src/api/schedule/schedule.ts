@@ -6,7 +6,7 @@ import type {
 } from "../../types/schedule";
 
 const api = axios.create({
-  baseURL: "/schedule",
+  baseURL: "http://localhost:8080/schedule",
   headers: {
     "Content-Type": "application/json",
   },
@@ -60,10 +60,11 @@ export const scheduleApi = {
   // 일정 수정
   editSchedule: async (
     userId: string,
+    scheduleId: number,
     data: ScheduleRequest,
   ): Promise<ScheduleResponse> => {
     const res = await api.put("/edit", data, {
-      params: { userId },
+      params: { userId, scheduleId },
     });
     return res.data;
   },

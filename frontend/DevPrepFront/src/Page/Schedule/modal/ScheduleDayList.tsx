@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import type { ScheduleListModalProps } from "../../../types/schedule";
+import "../../../css/ScheduleDayList.css";
 
 export function ScheduleDayListModal({
   isOpen,
@@ -13,9 +14,9 @@ export function ScheduleDayListModal({
   }
 
   return (
-    <div className="modal-overlay">
-      <div className="schedule-modal">
-        {date && <h2>{format(date, "MM/dd")}</h2>}
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="schedule-modal" onClick={(e) => e.stopPropagation()}>
+        {date && <h2>{format(date, "MM월 dd일")}</h2>}
 
         {schedules.length === 0 ? (
           <p>등록된 일정이 없습니다.</p>
@@ -26,7 +27,14 @@ export function ScheduleDayListModal({
                 key={schedule.id}
                 onClick={() => onSelectSchedule(schedule.id)}
               >
-                {schedule.title}
+                <span>{schedule.title}</span>
+
+                <span>
+                  {new Date(schedule.startAt).toLocaleTimeString("ko-KR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
               </li>
             ))}
           </ul>

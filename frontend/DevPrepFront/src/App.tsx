@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { SchedulePage } from "./page/Schedule/Schedule";
-import { Layout } from "./components/sidebar";
+import { ScheduleWrite } from "./page/Schedule/ScheduleWrite";
+import { Layout } from "./components/Layout";
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/schedule" element={<SchedulePage />} />
+          <Route path="/schedule/regist" element={<ScheduleWrite />} />
         </Route>
       </Routes>
     </BrowserRouter>
