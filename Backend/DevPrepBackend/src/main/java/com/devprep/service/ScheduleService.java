@@ -78,10 +78,11 @@ public class ScheduleService {
 	@Transactional
 	public ScheduleResponse regSchedule(String userId, ScheduleRequest req) {
 		
-		userRepository.findByUserId(userId)
+		User user = userRepository.findByUserId(userId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 		
 		Schedule schedule = Schedule.builder()
+				.user(user)
 				.title(req.getTitle())
 				.content(req.getContent())
 				.startAt(req.getStartAt())
@@ -91,14 +92,7 @@ public class ScheduleService {
 				
 		Schedule saved = scheduleRepository.save(schedule);
 		
-		return ScheduleResponse.builder()
-				.id(schedule.getId())
-				.title(saved.getTitle())
-				.content(saved.getContent())
-				.startAt(saved.getStartAt())
-				.endAt(saved.getEndAt())
-				.createdAt(saved.getCreatedAt())
-				.build();
+		return toResponse(saved);
 	}
 	
 	// 일정 수정
@@ -121,13 +115,7 @@ public class ScheduleService {
 		schedule.setEndAt(req.getEndAt());
 		schedule.setUpdatedAt(LocalDateTime.now());
 		
-		return ScheduleResponse.builder()
-				.id(schedule.getId())
-				.title(schedule.getTitle())
-				.content(schedule.getContent())
-				.startAt(schedule.getStartAt())
-				.endAt(schedule.getEndAt())
-				.build();
+		return toResponse(schedule);
 	}
 	
 	// 일정 삭제
